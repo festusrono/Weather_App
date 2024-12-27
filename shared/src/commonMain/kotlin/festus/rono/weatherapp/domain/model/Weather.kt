@@ -5,3 +5,4 @@ data class Weather(
     val temperature: String,
     val iconUrl: String,
 )
+
