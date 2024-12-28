@@ -3,6 +3,7 @@
 
     <application
         android:allowBackup="false"
+        android:name="festus.rono.weatherapp.BaseApplication"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
