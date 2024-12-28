@@ -13,11 +13,10 @@ fun WeatherResponse.toDomain(): Weather {
     )
 }
 
-
 fun ForecastResponse.toDomain(): List<ForeCast> {
-    this.list.map {
+    return this.list.map {
         ForeCast(
-            date = it.dt.toString(),
+            date = formatDate(it.dt.toLong()),
             temperature = it.main.temp.minus(273).toString(),
             iconUrl = getImageUrl(it.weather.first().icon)
         )

@@ -6,12 +6,17 @@ import festus.rono.weatherapp.domain.model.ForeCast
 import festus.rono.weatherapp.domain.model.Weather
 import festus.rono.weatherapp.domain.model.respository.WeatherRepository
 
-class WeatherRepositoryImpl(private val apiService: ApiService) : WeatherRepository {
+abstract class WeatherRepositoryImpl(private val apiService: ApiService) : WeatherRepository {
     override suspend fun getCurrentWeatherInfo(lat: Double, long: Double): Weather {
         return apiService.currentWeatherInfo(lat, long).toDomain()
     }
 
     override suspend fun getForecastInfo(lat: Double, long: Double): List<ForeCast> {
-        return apiService.forecastInfo(lat, long).list
+        return apiService.forecastInfo(lat, long).toDomain()
+
     }
-    }
+
+}
+
+
+
