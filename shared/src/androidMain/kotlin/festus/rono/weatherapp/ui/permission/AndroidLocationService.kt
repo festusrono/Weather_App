@@ -6,6 +6,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class AndroidLocationService(
@@ -26,16 +27,20 @@ class AndroidLocationService(
     @Suppress("MissingPermission")
     suspend fun getLocation(): Location = suspendCoroutine { continuation ->
         fusedLocationProviderClient?.lastLocation?.addOnSuccessListener { location ->
-            continuation.resumeWith(
-                Result.success(
-                    Location(
-                        latitude = location.latitude,
-                        longitude = location.longitude
+            location?.let {
+                continuation.resumeWith(
+                    Result.success(
+                        Location(
+                            latitude = location.latitude,
+                            longitude = location.longitude
+                        )
                     )
                 )
-            )
+            }
 
-        }?.addOnFailureListener { }
+        }?.addOnFailureListener {
+            continuation.resumeWithException(Exception("Unable not get location"))
+        }
     }
     override fun requestLocationPermission(granted: (Boolean) -> Unit) {
         launcher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
