@@ -1,14 +1,22 @@
 package festus.rono.weatherapp.ui.permission
 
+import kotlinx.cinterop.ExperimentalForeignApi
+
 class IosLocationService : LocationService  {
     private val locationManager = CLLocationManager()
 
     override fun isPermissionGranted(): Boolean {
         val status = locationManager.authorizationStatus()
-        return status == kCLAuthorizationStatusAuthorizedAlways ||
-                status == kCLAuthorizationStatusAuthorizedWhenInUse
+        return status == kCLAuthorizationStatusAuthorizedAlways || status == kCLAuthorizationStatusAuthorizedWhenInUse
 
     }
+    @OptIn(ExperimentalForeignApi::class)
+    fun getLocation():Location?{
+        return locationManager.location?.coordinate?.useContents {
+            Location(latitude, longitude)
+        }
+    }
+
     override fun requestLocationPermission(granted: (Boolean) -> Unit) {
         val status = locationManager.authorizationStatus()
         if (status == kCLAuthorizationStatusNotDetermined) {
@@ -19,7 +27,7 @@ class IosLocationService : LocationService  {
     }
 }
 
-private class LocationDelegate(granted: (Boolean) -> Unit) : NSObject(),
+private class LocationDelegate(val granted: (Boolean) -> Unit) : NSObject(),
     CLLocationManagerDelegateProtocol {
         override fun locationManager(
             manager: CLLocationManager,
@@ -29,7 +37,7 @@ private class LocationDelegate(granted: (Boolean) -> Unit) : NSObject(),
                 kCLAuthorizationStatusAuthorizedAlways,
                 kCLAuthorizationStatusAuthorizedWhenInUse ->
                     granted.invoke(true)
-            }else {
+            }else -> {
                 granted.invoke(false)
             }
         }
