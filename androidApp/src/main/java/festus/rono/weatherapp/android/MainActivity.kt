@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -123,6 +124,17 @@ fun WeatherApp(modifier: Modifier = Modifier, viewModel: WeatherViewModel) {
                         verticalAlignment = Alignment.CenterVertically
 
                     ) {
+                        Text(text = it.date)
+                        Spacer(modifier = Modifier.weight(1f))
+                        Text(text = it.temperature.plus("°C"))
+                        Spacer(modifier = Modifier.weight(1f))
+                        com.skydoves.landscapist.glide.GlideImage(
+                            imageModel = it.iconUrl,
+                            modifier = Modifier.size(30.dp)
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+
+                    }
 
                     }
                 }
