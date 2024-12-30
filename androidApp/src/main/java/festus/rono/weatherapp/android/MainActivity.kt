@@ -16,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import festus.rono.weatherapp.ui.WeatherViewModel
 import festus.rono.weatherapp.ui.permission.AndroidLocationService
 
@@ -37,12 +38,15 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun WeatherApp(modifier: Modifier = Modifier, viewModel: WeatherViewModel) {
-    var locationService by remember{mutableStateOf<AndroidLocationService?>()
+    var locationService by remember {mutableStateOf<AndroidLocationService?>(null)}
     val permission = rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()){
 
     }
+
+    val context = LocalContext.current
     LaunchedEffect (Unit) {
-        locationService = AndroidLocationService(this@MainActivity, permission)
+        locationService = AndroidLocationService(context, permission)
+        locationService?.requestLocationPermission{ }
     }
-    }
+
 }
