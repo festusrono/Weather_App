@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import festus.rono.weatherapp.domain.model.Weather
 import festus.rono.weatherapp.ui.WeatherViewModel
@@ -91,8 +92,12 @@ fun WeatherApp(modifier: Modifier = Modifier, viewModel: WeatherViewModel) {
                     .height(100.dp)
             )
             Spacer(modifier = Modifier.height(24.dp))
-            Text(text = weather.description, color = Color.White)
-            Spacer(modifier = Modifier.height(32.dp))
+            Text(text = weather.temperature.plus("°C"),
+                style = MaterialTheme.typography.headlineLarge.copy(fontSize = 40.sp)
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(text = weather.name, style = MaterialTheme.typography.headlineSmall.copy(fontSize = 20.sp))
         }
     }
 
