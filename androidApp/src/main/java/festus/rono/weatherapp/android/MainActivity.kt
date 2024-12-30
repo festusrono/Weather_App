@@ -14,11 +14,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import festus.rono.weatherapp.ui.WeatherViewModel
 import festus.rono.weatherapp.ui.permission.AndroidLocationService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,8 +42,18 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun WeatherApp(modifier: Modifier = Modifier, viewModel: WeatherViewModel) {
     var locationService by remember {mutableStateOf<AndroidLocationService?>(null)}
-    val permission = rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()){
 
+    val scope = rememberCoroutineScope()
+    val permission = rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()){
+        if (bool) {
+            scope.launch(Dispatchers.IO) {
+                val location = locationService?.getLocation()
+                location?.let {
+                    viewModel.getCurrentWeatherInfo(it.latitude, it.longitude)
+                    viewModel.getForecastInfo(it.latitude, it.longitude)
+                }
+            }
+        }
     }
 
     val context = LocalContext.current
