@@ -1,5 +1,8 @@
 package festus.rono.weatherapp.data.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class MainDTO(
     val feels_like: Double,
     val grnd_level: Int,
