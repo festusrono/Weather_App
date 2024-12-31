@@ -11,6 +11,10 @@ class WeatherRepositoryImpl(private val apiService: ApiService) : WeatherReposit
         return apiService.currentWeatherInfo(lat, long).toDomain()
     }
 
+    override suspend fun getWeatherInfo(lat: Double, long: Double): Weather {
+        return apiService.currentWeatherInfo(lat, long).toDomain()
+    }
+
     override suspend fun getForecastInfo(lat: Double, long: Double): List<ForeCast> {
         return apiService.forecastInfo(lat, long).toDomain()
 

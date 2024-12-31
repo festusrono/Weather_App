@@ -43,6 +43,7 @@ import festus.rono.weatherapp.ui.WeatherViewModel
 import festus.rono.weatherapp.ui.permission.AndroidLocationService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,6 +55,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    val viewModel: WeatherViewModel = koinViewModel()
+                    WeatherApp(viewModel = viewModel)
                 }
             }
         }
