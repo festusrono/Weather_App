@@ -35,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -44,6 +45,7 @@ import festus.rono.weatherapp.ui.permission.AndroidLocationService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+import java.util.Locale
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -104,17 +106,22 @@ fun WeatherApp(modifier: Modifier = Modifier, viewModel: WeatherViewModel) {
                     .height(100.dp)
             )
             Spacer(modifier = Modifier.height(24.dp))
-            Text(text = weather.temperature.plus("°C"),
-                style = MaterialTheme.typography.headlineLarge.copy(fontSize = 40.sp, color = Color.White)
+            Text(text = formatValue(weather.temperature.toFloat()).plus("°C"),
+                style = MaterialTheme.typography.headlineLarge.copy(fontSize = 60.sp, color = Color.White)
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             Text(text = weather.name, style = MaterialTheme.typography.headlineMedium, color = Color.White)
         }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
         uiState.forecastInfo?.let { list ->
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 item {
                     Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
                         text = "Upcoming forecast",
                         style = MaterialTheme.typography.headlineSmall.copy(Color.White)
                     )
@@ -132,7 +139,7 @@ fun WeatherApp(modifier: Modifier = Modifier, viewModel: WeatherViewModel) {
                     ) {
                         Text(text = it.date)
                         Spacer(modifier = Modifier.weight(1f))
-                        Text(text = it.temperature.plus("°C"))
+                        Text(text = formatValue(it.temperature.toFloat()).plus("°C"))
                         Spacer(modifier = Modifier.weight(1f))
                         com.skydoves.landscapist.glide.GlideImage(
                             imageModel = it.iconUrl,
@@ -147,4 +154,8 @@ fun WeatherApp(modifier: Modifier = Modifier, viewModel: WeatherViewModel) {
             }
     }
 
+}
+
+fun formatValue(float: Float): String {
+    return String.format(Locale.getDefault(), "%.2f", float)  //for making two decimal places
 }
