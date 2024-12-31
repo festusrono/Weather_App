@@ -18,7 +18,8 @@ class WeatherViewModel(
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UiState())
-    val uiState = _uiState.asStateFlow()
+    val uiState = _uiState.asStateFlow().common()
+
     fun getCurrentWeatherInfo(lat: Double, long: Double) = viewModelScope.launch {
         val response = getCurrentWeatherInfoUseCase.invoke(lat, long)
         if(response.isSuccess) {
