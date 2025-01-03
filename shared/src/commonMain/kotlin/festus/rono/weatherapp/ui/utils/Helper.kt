@@ -1,6 +1,10 @@
 package festus.rono.weatherapp.ui.utils
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 internal fun <T : Any> StateFlow<T>.common(): CommonStateFlow<T> = CommonStateFlow<T>(underlyingStateFlow = this)
 
@@ -13,8 +17,26 @@ class CommonStateFlow<T>(
     override val value: T
         get() = underlyingStateFlow.value
 
-    override suspend fun collect(collector: suspend (T) -> Unit): Nothing {
+    override suspend fun collect(collector: FlowCollector<T>): Nothing {
         underlyingStateFlow.collect(collector)
     }
 
+
+
+    fun startCollect(
+        onEach: (T) -> Unit,
+        onCancel: () -> Unit
+    ) {
+        val collectionScope = CoroutineScope(Dispatchers.Main)
+        val collectionJob = collectionScope.launch {
+            try {
+                collect(collector = {onEach(it)})
+            } catch (e: Exception) {
+                onCancel()
+            }
+            }
+        }
+
 }
+
+

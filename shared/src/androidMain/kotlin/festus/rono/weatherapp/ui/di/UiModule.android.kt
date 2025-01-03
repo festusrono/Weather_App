@@ -8,5 +8,4 @@ import org.koin.dsl.module
 private val viewModelModule = module {
     viewModel { WeatherViewModel(get(), get()) }
 }
-
-actual fun sharedViewModule(): Module = viewModelModule
+actual fun sharedViewModelModule(): Module = viewModelModule

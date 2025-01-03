@@ -6,6 +6,7 @@ import festus.rono.weatherapp.domain.model.ForeCast
 import festus.rono.weatherapp.domain.model.Weather
 import festus.rono.weatherapp.domain.model.use_case.GetCurrentWeatherInfoUseCase
 import festus.rono.weatherapp.domain.model.use_case.GetForecastInfoUseCase
+import festus.rono.weatherapp.ui.utils.common
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
